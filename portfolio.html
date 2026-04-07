@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Portfolio — Antonina Hudz</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Cormorant+Garamond:wght@300;400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --red: #C0392B; --red-deep: #8B1A1A; --cream: #F5F0E8;
+    --off-white: #FAF8F5; --charcoal: #1A1A1A; --mid: #4A4A4A; --soft: #9A9A9A;
+  }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--charcoal); color: var(--cream); overflow-x: hidden; }
+
+  /* NAV */
+  nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 24px 80px; display: flex; justify-content: space-between; align-items: center; }
+  .nav-logo { font-family: 'Playfair Display', serif; font-size: 16px; font-weight: 700; color: var(--charcoal); letter-spacing: .05em; }
+  .nav-links { display: flex; gap: 40px; list-style: none; }
+  .nav-links a { font-size: 11px; font-weight: 500; letter-spacing: .2em; text-transform: uppercase; color: var(--mid); text-decoration: none; transition: color .3s; }
+  .nav-links a:hover { color: var(--red); }
+
+  /* HERO */
+  .hero { min-height: 100vh; background: var(--off-white); color: var(--charcoal); display: grid; grid-template-columns: 1fr 1fr; position: relative; overflow: hidden; }
+  .hero::before { content: ''; position: absolute; top: -100px; right: -100px; width: 600px; height: 600px; border-radius: 50%; background: radial-gradient(circle, rgba(192,57,43,.08) 0%, transparent 70%); pointer-events: none; }
+  .hero-text { display: flex; flex-direction: column; justify-content: center; padding: 80px 60px 80px 80px; position: relative; z-index: 2; }
+  .hero-tag { font-size: 11px; font-weight: 500; letter-spacing: .35em; text-transform: uppercase; color: var(--red); margin-bottom: 24px; opacity: 0; animation: fadeUp .8s ease forwards .2s; }
+  .hero-title { font-family: 'Playfair Display', serif; font-size: clamp(72px,8vw,110px); font-weight: 900; line-height: .9; letter-spacing: -.02em; color: var(--charcoal); opacity: 0; animation: fadeUp .8s ease forwards .4s; }
+  .hero-title span { color: var(--red); font-style: italic; }
+  .hero-name { font-family: 'Cormorant Garamond', serif; font-size: clamp(18px,2vw,26px); font-weight: 300; letter-spacing: .15em; color: var(--mid); margin-top: 20px; opacity: 0; animation: fadeUp .8s ease forwards .6s; }
+  .hero-desc { font-size: 15px; font-weight: 300; color: var(--mid); max-width: 380px; line-height: 1.8; margin-top: 36px; opacity: 0; animation: fadeUp .8s ease forwards .8s; }
+  .hero-cta { display: inline-flex; align-items: center; gap: 12px; margin-top: 48px; padding: 16px 36px; background: var(--red); color: white; font-size: 12px; font-weight: 500; letter-spacing: .2em; text-transform: uppercase; text-decoration: none; transition: background .3s, transform .3s; opacity: 0; animation: fadeUp .8s ease forwards 1s; }
+  .hero-cta:hover { background: var(--red-deep); transform: translateY(-2px); }
+  .hero-cta svg { transition: transform .3s; }
+  .hero-cta:hover svg { transform: translateX(4px); }
+  .hero-visual { background: var(--cream); position: relative; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+  .hero-photo-placeholder { width: 100%; height: 100%; background: linear-gradient(135deg,#e8e0d4,#d4c8b8); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; color: var(--soft); }
+  .hero-photo-placeholder .icon { font-size: 56px; opacity: .4; }
+  .hero-photo-placeholder p { font-size: 13px; letter-spacing: .1em; opacity: .6; }
+  .hero-badge { position: absolute; top: 40px; right: 40px; width: 100px; height: 100px; border-radius: 50%; border: 1px solid var(--red); display: flex; flex-direction: column; align-items: center; justify-content: center; opacity: 0; animation: fadeIn 1s ease forwards 1.2s; }
+  .hero-badge-inner { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 900; color: var(--red); line-height: 1; }
+  .hero-badge-label { font-size: 8px; letter-spacing: .2em; text-transform: uppercase; color: var(--mid); }
+
+  /* SECTION */
+  .section-header { display: flex; align-items: baseline; gap: 24px; margin-bottom: 80px; }
+  .section-num { font-family: 'Cormorant Garamond', serif; font-size: 14px; color: var(--red); letter-spacing: .1em; }
+  .section-title { font-family: 'Playfair Display', serif; font-size: clamp(36px,4vw,56px); font-weight: 700; line-height: 1.1; }
+  .section-line { flex: 1; height: 1px; background: rgba(255,255,255,.1); margin-bottom: 8px; }
+
+  /* SERVICES */
+  .services { background: var(--charcoal); padding: 120px 80px; position: relative; overflow: hidden; }
+  .services::before { content: 'SERVICES'; position: absolute; top: 60px; left: -20px; font-family: 'Playfair Display', serif; font-size: 160px; font-weight: 900; color: rgba(255,255,255,.02); white-space: nowrap; pointer-events: none; }
+  .services-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 2px; }
+  .service-card { background: #222; padding: 48px 36px; position: relative; overflow: hidden; cursor: default; transition: background .4s; }
+  .service-card::after { content: ''; position: absolute; bottom: 0; left: 0; height: 3px; width: 0; background: var(--red); transition: width .4s ease; }
+  .service-card:hover { background: #2a2a2a; }
+  .service-card:hover::after { width: 100%; }
+  .service-icon { font-size: 36px; margin-bottom: 28px; display: block; }
+  .service-num { position: absolute; top: 24px; right: 24px; font-family: 'Cormorant Garamond', serif; font-size: 48px; font-weight: 300; color: rgba(255,255,255,.06); line-height: 1; }
+  .service-name { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 700; margin-bottom: 16px; line-height: 1.2; }
+  .service-desc { font-size: 13px; font-weight: 300; color: rgba(255,255,255,.5); line-height: 1.8; }
+
+  /* WORKS */
+  .works { background: #111; padding: 120px 80px; }
+  .works-tabs { display: flex; gap: 0; margin-bottom: 60px; border-bottom: 1px solid rgba(255,255,255,.1); }
+  .tab-btn { padding: 14px 32px; background: none; border: none; cursor: pointer; font-family: 'DM Sans', sans-serif; font-size: 11px; font-weight: 500; letter-spacing: .2em; text-transform: uppercase; color: rgba(255,255,255,.35); transition: color .3s; position: relative; }
+  .tab-btn::after { content: ''; position: absolute; bottom: -1px; left: 0; right: 0; height: 2px; background: var(--red); transform: scaleX(0); transition: transform .3s; }
+  .tab-btn.active { color: white; }
+  .tab-btn.active::after { transform: scaleX(1); }
+  .tab-btn:hover { color: rgba(255,255,255,.7); }
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  .photo-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 3px; }
+  .photo-item { aspect-ratio: 4/3; background: #222; position: relative; overflow: hidden; cursor: pointer; }
+  .photo-item img { width: 100%; height: 100%; object-fit: cover; transition: transform .5s; display: block; }
+  .photo-item:hover img { transform: scale(1.05); }
+  .photo-overlay { position: absolute; inset: 0; background: rgba(192,57,43,0); display: flex; align-items: center; justify-content: center; transition: background .3s; }
+  .photo-item:hover .photo-overlay { background: rgba(192,57,43,.7); }
+  .photo-overlay-text { color: white; font-size: 12px; font-weight: 500; letter-spacing: .15em; text-transform: uppercase; opacity: 0; transform: translateY(10px); transition: all .3s; }
+  .photo-item:hover .photo-overlay-text { opacity: 1; transform: translateY(0); }
+  .photo-placeholder { width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; background: linear-gradient(135deg,#2a2a2a,#1e1e1e); color: rgba(255,255,255,.2); }
+  .ph-icon { font-size: 32px; opacity: .5; }
+  .ph-text { font-size: 11px; letter-spacing: .1em; }
+
+  .video-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 3px; }
+  .video-item { aspect-ratio: 16/9; background: #1a1a1a; position: relative; overflow: hidden; cursor: pointer; }
+  .video-placeholder { width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; background: linear-gradient(135deg,#2a2a2a,#1e1e1e); color: rgba(255,255,255,.2); }
+  .video-play-btn { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); width: 52px; height: 52px; border-radius: 50%; background: rgba(192,57,43,.9); display: flex; align-items: center; justify-content: center; transition: transform .3s, background .3s; }
+  .video-item:hover .video-play-btn { transform: translate(-50%,-50%) scale(1.1); background: var(--red); }
+  .video-play-btn svg { margin-left: 3px; }
+  .video-label { position: absolute; bottom: 0; left: 0; right: 0; padding: 20px 20px 16px; background: linear-gradient(transparent,rgba(0,0,0,.8)); font-size: 12px; font-weight: 300; color: rgba(255,255,255,.7); letter-spacing: .05em; }
+
+  .avatar-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 3px; }
+  .avatar-item { aspect-ratio: 3/4; background: #222; position: relative; overflow: hidden; cursor: pointer; }
+  .avatar-item img { width: 100%; height: 100%; object-fit: cover; transition: transform .5s; }
+  .avatar-item:hover img { transform: scale(1.05); }
+  .avatar-placeholder { width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; background: linear-gradient(135deg,#252525,#1a1a1a); color: rgba(255,255,255,.2); }
+  .avatar-lang-badge { position: absolute; top: 12px; right: 12px; padding: 4px 10px; background: var(--red); color: white; font-size: 10px; font-weight: 600; letter-spacing: .1em; }
+
+  .add-work-hint { margin-top: 40px; text-align: center; font-size: 12px; color: rgba(255,255,255,.25); letter-spacing: .1em; }
+  .add-work-hint span { color: var(--red); }
+
+  /* ABOUT */
+  .about { background: var(--cream); color: var(--charcoal); padding: 120px 80px; display: grid; grid-template-columns: 1fr 1fr; gap: 100px; align-items: center; }
+  .about-tag { font-size: 11px; font-weight: 500; letter-spacing: .35em; text-transform: uppercase; color: var(--red); margin-bottom: 20px; }
+  .about-title { font-family: 'Playfair Display', serif; font-size: clamp(36px,3.5vw,52px); font-weight: 900; line-height: 1.15; margin-bottom: 28px; }
+  .about-title em { font-style: italic; color: var(--red); }
+  .about-text { font-size: 15px; font-weight: 300; color: var(--mid); line-height: 1.9; margin-bottom: 20px; }
+  .tools-list { margin-top: 32px; display: flex; flex-wrap: wrap; gap: 10px; }
+  .tool-tag { padding: 8px 16px; border: 1px solid rgba(0,0,0,.15); font-size: 11px; font-weight: 400; letter-spacing: .1em; color: var(--mid); }
+  .stats { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; margin-top: 48px; padding-top: 48px; border-top: 1px solid rgba(0,0,0,.1); }
+  .stat-num { font-family: 'Playfair Display', serif; font-size: 48px; font-weight: 900; color: var(--red); line-height: 1; }
+  .stat-label { font-size: 12px; font-weight: 300; color: var(--soft); letter-spacing: .1em; margin-top: 6px; }
+  .about-quote-box { background: var(--charcoal); color: var(--cream); padding: 60px 52px; position: relative; }
+  .about-quote-box::before { content: '\201C'; font-family: 'Playfair Display', serif; font-size: 120px; color: var(--red); position: absolute; top: -20px; left: 32px; line-height: 1; opacity: .5; }
+  .about-quote { font-family: 'Cormorant Garamond', serif; font-size: 26px; font-weight: 400; font-style: italic; line-height: 1.6; position: relative; z-index: 1; margin-bottom: 28px; }
+  .about-quote-author { font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: var(--red); }
+
+  /* PROCESS */
+  .process { background: #111; padding: 120px 80px; }
+  .process-steps { display: grid; grid-template-columns: repeat(5,1fr); gap: 0; margin-top: 80px; position: relative; }
+  .process-steps::before { content: ''; position: absolute; top: 32px; left: 10%; right: 10%; height: 1px; background: linear-gradient(90deg,transparent,var(--red),transparent); }
+  .step { padding: 0 20px; text-align: center; }
+  .step-dot { width: 16px; height: 16px; border-radius: 50%; background: var(--red); margin: 0 auto 32px; position: relative; z-index: 1; }
+  .step-dot::after { content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); width: 28px; height: 28px; border-radius: 50%; border: 1px solid rgba(192,57,43,.3); }
+  .step-num { font-family: 'Cormorant Garamond', serif; font-size: 11px; color: var(--red); letter-spacing: .2em; margin-bottom: 12px; }
+  .step-title { font-family: 'Playfair Display', serif; font-size: 17px; font-weight: 700; margin-bottom: 12px; line-height: 1.3; }
+  .step-desc { font-size: 12px; font-weight: 300; color: rgba(255,255,255,.45); line-height: 1.7; }
+
+  /* CTA */
+  .cta-section { background: var(--red); padding: 120px 80px; text-align: center; position: relative; overflow: hidden; }
+  .cta-section::before { content: "LET'S CREATE"; position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); font-family: 'Playfair Display', serif; font-size: 200px; font-weight: 900; color: rgba(255,255,255,.05); white-space: nowrap; pointer-events: none; }
+  .cta-title { font-family: 'Playfair Display', serif; font-size: clamp(42px,5vw,72px); font-weight: 900; color: white; line-height: 1.1; margin-bottom: 20px; position: relative; }
+  .cta-sub { font-size: 16px; font-weight: 300; color: rgba(255,255,255,.75); margin-bottom: 52px; position: relative; }
+  .cta-btn { display: inline-flex; align-items: center; gap: 12px; padding: 20px 52px; background: white; color: var(--red); font-size: 12px; font-weight: 700; letter-spacing: .25em; text-transform: uppercase; text-decoration: none; transition: transform .3s, box-shadow .3s; position: relative; }
+  .cta-btn:hover { transform: translateY(-3px); box-shadow: 0 20px 40px rgba(0,0,0,.2); }
+
+  /* FOOTER */
+  footer { background: #0a0a0a; padding: 60px 80px; display: flex; justify-content: space-between; align-items: center; }
+  .footer-logo { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; color: var(--cream); }
+  .footer-logo span { color: var(--red); }
+  .footer-copy { font-size: 12px; color: rgba(255,255,255,.3); letter-spacing: .1em; }
+  .footer-links { display: flex; gap: 32px; list-style: none; }
+  .footer-links a { font-size: 11px; letter-spacing: .15em; text-transform: uppercase; color: rgba(255,255,255,.4); text-decoration: none; transition: color .3s; }
+  .footer-links a:hover { color: var(--red); }
+
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  .reveal { opacity: 0; transform: translateY(40px); transition: opacity .8s ease, transform .8s ease; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  @media (max-width:1024px) {
+    .hero { grid-template-columns: 1fr; min-height: auto; }
+    .hero-visual { height: 300px; }
+    .hero-text { padding: 120px 40px 60px; }
+    .services, .works, .process, .cta-section { padding: 80px 40px; }
+    .services-grid { grid-template-columns: repeat(2,1fr); }
+    .photo-grid, .video-grid { grid-template-columns: repeat(2,1fr); }
+    .avatar-grid { grid-template-columns: repeat(2,1fr); }
+    .about { grid-template-columns: 1fr; gap: 60px; padding: 80px 40px; }
+    .process-steps { grid-template-columns: repeat(2,1fr); gap: 40px; }
+    .process-steps::before { display: none; }
+    footer { flex-direction: column; gap: 24px; padding: 40px; text-align: center; }
+    nav { padding: 20px 40px; }
+    .nav-links { display: none; }
+  }
+  @media (max-width:640px) {
+    .services-grid { grid-template-columns: 1fr; }
+    .photo-grid, .video-grid, .avatar-grid { grid-template-columns: 1fr; }
+    .stats { grid-template-columns: 1fr 1fr; }
+    .tab-btn { padding: 12px 14px; font-size: 10px; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">A·H</div>
+  <ul class="nav-links">
+    <li><a href="#services">Услуги</a></li>
+    <li><a href="#works">Работы</a></li>
+    <li><a href="#about">Обо мне</a></li>
+    <li><a href="#contact">Контакт</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-text">
+    <p class="hero-tag">AI Creator · Visual Content</p>
+    <h1 class="hero-title">Port<span>folio</span></h1>
+    <p class="hero-name">Antonina Hudz</p>
+    <p class="hero-desc">Создаю реалистичный AI-контент — фото, видео, аватары и переводы. Там, где технологии встречаются с творчеством.</p>
+    <a href="#works" class="hero-cta">
+      Смотреть работы
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </a>
+  </div>
+  <div class="hero-visual">
+    <div class="hero-photo-placeholder">
+      <span class="icon">📸</span>
+      <p>Ваше фото здесь</p>
+    </div>
+    <div class="hero-badge">
+      <span class="hero-badge-inner">AI</span>
+      <span class="hero-badge-label">Creator</span>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section class="services" id="services">
+  <div class="section-header">
+    <span class="section-num">01</span>
+    <h2 class="section-title">Что я делаю</h2>
+    <div class="section-line"></div>
+  </div>
+  <div class="services-grid">
+    <div class="service-card reveal">
+      <span class="service-num">01</span>
+      <span class="service-icon">🖼️</span>
+      <h3 class="service-name">Реалистичные AI-фото</h3>
+      <p class="service-desc">Гиперреалистичные изображения — портреты, продуктовые фото, концепты и атмосферные сцены в любом стиле.</p>
+    </div>
+    <div class="service-card reveal">
+      <span class="service-num">02</span>
+      <span class="service-icon">🎬</span>
+      <h3 class="service-name">AI-видео</h3>
+      <p class="service-desc">Реалистичные видеоклипы и анимации для соцсетей, рекламы и презентаций. Движущиеся сцены, которые впечатляют.</p>
+    </div>
+    <div class="service-card reveal">
+      <span class="service-num">03</span>
+      <span class="service-icon">🧑‍🎨</span>
+      <h3 class="service-name">AI-аватары</h3>
+      <p class="service-desc">Персонализированные аватары в разных стилях — от фотореализма до арт-иллюстрации. Для профилей и брендинга.</p>
+    </div>
+    <div class="service-card reveal">
+      <span class="service-num">04</span>
+      <span class="service-icon">🌐</span>
+      <h3 class="service-name">Переводы с аватаром</h3>
+      <p class="service-desc">Ваш аватар говорит на любом языке — английский, испанский, французский и другие. Идеально для международного контента.</p>
+    </div>
+  </div>
+</section>
+
+<!-- WORKS -->
+<section class="works" id="works">
+  <div class="section-header">
+    <span class="section-num">02</span>
+    <h2 class="section-title">Мои работы</h2>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="works-tabs">
+    <button class="tab-btn active" onclick="switchTab('photos',this)">AI-фото</button>
+    <button class="tab-btn" onclick="switchTab('videos',this)">AI-видео</button>
+    <button class="tab-btn" onclick="switchTab('avatars',this)">Аватары</button>
+    <button class="tab-btn" onclick="switchTab('translations',this)">Переводы</button>
+  </div>
+
+  <!-- PHOTOS -->
+  <div class="tab-panel active" id="tab-photos">
+    <div class="photo-grid">
+      <!-- Чтобы добавить своё фото: замени <div class="photo-placeholder">...</div> на <img src="ССЫЛКА_НА_ФОТО" alt=""> -->
+      <div class="photo-item reveal">
+        <div class="photo-placeholder"><span class="ph-icon">🖼️</span><span class="ph-text">Фото 1</span></div>
+        <div class="photo-overlay"><span class="photo-overlay-text">Посмотреть</span></div>
+      </div>
+      <div class="photo-item reveal">
+        <div class="photo-placeholder"><span class="ph-icon">🖼️</span><span class="ph-text">Фото 2</span></div>
+        <div class="photo-overlay"><span class="photo-overlay-text">Посмотреть</span></div>
+      </div>
+      <div class="photo-item reveal">
+        <div class="photo-placeholder"><span class="ph-icon">🖼️</span><span class="ph-text">Фото 3</span></div>
+        <div class="photo-overlay"><span class="photo-overlay-text">Посмотреть</span></div>
+      </div>
+      <div class="photo-item reveal">
+        <div class="photo-placeholder"><span class="ph-icon">🖼️</span><span class="ph-text">Фото 4</span></div>
+        <div class="photo-overlay"><span class="photo-overlay-text">Посмотреть</span></div>
+      </div>
+      <div class="photo-item reveal">
+        <div class="photo-placeholder"><span class="ph-icon">🖼️</span><span class="ph-text">Фото 5</span></div>
+        <div class="photo-overlay"><span class="photo-overlay-text">Посмотреть</span></div>
+      </div>
+      <div class="photo-item reveal">
+        <div class="photo-placeholder"><span class="ph-icon">🖼️</span><span class="ph-text">Фото 6</span></div>
+        <div class="photo-overlay"><span class="photo-overlay-text">Посмотреть</span></div>
+      </div>
+    </div>
+    <p class="add-work-hint">Пришли мне свои фото — я вставлю их за минуту, или замени заглушки на <span>ссылки на свои изображения</span></p>
+  </div>
+
+  <!-- VIDEOS -->
+  <div class="tab-panel" id="tab-videos">
+    <div class="video-grid">
+      <!-- Замени href на ссылки на свои видео (YouTube, Google Drive и т.д.) -->
+      <div class="video-item reveal" style="cursor:default">
+        <iframe src="https://drive.google.com/file/d/196zaRXIFFoPijWtlQGo9LOa094LhCBhC/preview" style="width:100%;height:100%;border:none;display:block;" allow="autoplay" allowfullscreen></iframe>
+        <div class="video-label">AI-видео</div>
+      </div>
+      <div class="video-item reveal" style="cursor:default">
+        <iframe src="https://drive.google.com/file/d/1CItZlchQdekYfs88xHyaBm1HWozoPJwg/preview" style="width:100%;height:100%;border:none;display:block;" allow="autoplay" allowfullscreen></iframe>
+        <div class="video-label">AI-видео</div>
+      </div>
+      <div class="video-item reveal" style="cursor:default">
+        <iframe src="https://drive.google.com/file/d/1g7ec0CqvoSyj1NOt4iol5nRm7gxO8yv1/preview" style="width:100%;height:100%;border:none;display:block;" allow="autoplay" allowfullscreen></iframe>
+        <div class="video-label">AI-видео</div>
+      </div>
+    </div>
+    <p class="add-work-hint">Замени <span>ССЫЛКА_НА_ВИДЕО_1</span> и т.д. на свои реальные ссылки</p>
+  </div>
+
+  <!-- AVATARS -->
+  <div class="tab-panel" id="tab-avatars">
+    <div class="avatar-grid">
+      <div class="avatar-item reveal">
+        <div class="avatar-placeholder"><span style="font-size:32px;opacity:.4">🧑‍🎨</span><span style="font-size:11px;color:rgba(255,255,255,.2)">Аватар 1</span></div>
+        <div class="avatar-lang-badge">Style 1</div>
+      </div>
+      <div class="avatar-item reveal">
+        <div class="avatar-placeholder"><span style="font-size:32px;opacity:.4">🧑‍🎨</span><span style="font-size:11px;color:rgba(255,255,255,.2)">Аватар 2</span></div>
+        <div class="avatar-lang-badge">Style 2</div>
+      </div>
+      <div class="avatar-item reveal">
+        <div class="avatar-placeholder"><span style="font-size:32px;opacity:.4">🧑‍🎨</span><span style="font-size:11px;color:rgba(255,255,255,.2)">Аватар 3</span></div>
+        <div class="avatar-lang-badge">Style 3</div>
+      </div>
+      <div class="avatar-item reveal">
+        <div class="avatar-placeholder"><span style="font-size:32px;opacity:.4">🧑‍🎨</span><span style="font-size:11px;color:rgba(255,255,255,.2)">Аватар 4</span></div>
+        <div class="avatar-lang-badge">Style 4</div>
+      </div>
+    </div>
+    <p class="add-work-hint">Пришли фото своих аватаров — добавлю их сюда</p>
+  </div>
+
+  <!-- TRANSLATIONS -->
+  <div class="tab-panel" id="tab-translations">
+    <div class="video-grid">
+      <div class="video-item reveal" onclick="window.open('ССЫЛКА_ПЕРЕВОД_EN','_blank')">
+        <div class="video-placeholder">
+          <span style="font-size:28px;opacity:.5">🇬🇧</span>
+          <span style="font-size:11px;letter-spacing:.1em;margin-top:4px">English</span>
+        </div>
+        <div class="video-play-btn"><svg width="18" height="18" viewBox="0 0 18 18" fill="white"><path d="M5 3l11 6-11 6V3z"/></svg></div>
+        <div class="video-label">Аватар говорит по-английски · HeyGen</div>
+      </div>
+      <div class="video-item reveal" onclick="window.open('ССЫЛКА_ПЕРЕВОД_ES','_blank')">
+        <div class="video-placeholder">
+          <span style="font-size:28px;opacity:.5">🇪🇸</span>
+          <span style="font-size:11px;letter-spacing:.1em;margin-top:4px">Español</span>
+        </div>
+        <div class="video-play-btn"><svg width="18" height="18" viewBox="0 0 18 18" fill="white"><path d="M5 3l11 6-11 6V3z"/></svg></div>
+        <div class="video-label">Аватар говорит по-испански · HeyGen</div>
+      </div>
+      <div class="video-item reveal" onclick="window.open('ССЫЛКА_ПЕРЕВОД_FR','_blank')">
+        <div class="video-placeholder">
+          <span style="font-size:28px;opacity:.5">🇫🇷</span>
+          <span style="font-size:11px;letter-spacing:.1em;margin-top:4px">Français</span>
+        </div>
+        <div class="video-play-btn"><svg width="18" height="18" viewBox="0 0 18 18" fill="white"><path d="M5 3l11 6-11 6V3z"/></svg></div>
+        <div class="video-label">Аватар говорит по-французски · HeyGen</div>
+      </div>
+    </div>
+    <p class="add-work-hint">Замени <span>ССЫЛКА_ПЕРЕВОД_EN</span> и т.д. на свои реальные ссылки</p>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="about" id="about">
+  <div>
+    <p class="about-tag">03 · Обо мне</p>
+    <h2 class="about-title">AI-визуал,<br>который <em>работает</em></h2>
+    <p class="about-text">Я Antonina — AI-криейтор, которая специализируется на создании визуального контента нового поколения. Использую передовые AI-инструменты, чтобы создавать изображения и видео, которые невозможно отличить от реальных.</p>
+    <p class="about-text">Мой подход — это синтез технической экспертизы и художественного чутья. Каждый проект — продуманный визуальный нарратив, а не просто сгенерированная картинка.</p>
+    <div class="tools-list">
+      <span class="tool-tag">Midjourney</span>
+      <span class="tool-tag">Nano</span>
+      <span class="tool-tag">Banana</span>
+      <span class="tool-tag">Kling AI</span>
+      <span class="tool-tag">Veo 3</span>
+      <span class="tool-tag">HeyGen</span>
+    </div>
+    <div class="stats">
+      <div><div class="stat-num">100+</div><div class="stat-label">Выполненных проектов</div></div>
+      <div><div class="stat-num">50+</div><div class="stat-label">Довольных клиентов</div></div>
+      <div><div class="stat-num">4</div><div class="stat-label">Направления работы</div></div>
+      <div><div class="stat-num">10+</div><div class="stat-label">Языков для аватара</div></div>
+    </div>
+  </div>
+  <div class="reveal">
+    <div class="about-quote-box">
+      <p class="about-quote">Я не просто использую AI — я превращаю его в инструмент настоящего творчества.</p>
+      <p class="about-quote-author">— Antonina Hudz</p>
+    </div>
+  </div>
+</section>
+
+<!-- PROCESS -->
+<section class="process">
+  <div class="section-header">
+    <span class="section-num">04</span>
+    <h2 class="section-title">Как я работаю</h2>
+    <div class="section-line"></div>
+  </div>
+  <div class="process-steps">
+    <div class="step reveal"><div class="step-dot"></div><div class="step-num">Step 01</div><h4 class="step-title">Бриф</h4><p class="step-desc">Обсуждаем задачу, стиль, референсы и ожидания</p></div>
+    <div class="step reveal"><div class="step-dot"></div><div class="step-num">Step 02</div><h4 class="step-title">Концепция</h4><p class="step-desc">Разрабатываю визуальную концепцию и первые варианты</p></div>
+    <div class="step reveal"><div class="step-dot"></div><div class="step-num">Step 03</div><h4 class="step-title">Генерация</h4><p class="step-desc">Создаю контент с нужным инструментом под задачу</p></div>
+    <div class="step reveal"><div class="step-dot"></div><div class="step-num">Step 04</div><h4 class="step-title">Доработка</h4><p class="step-desc">Ретушь, коррекция и финальная полировка результата</p></div>
+    <div class="step reveal"><div class="step-dot"></div><div class="step-num">Step 05</div><h4 class="step-title">Доставка</h4><p class="step-desc">Финальные файлы в нужном формате и разрешении</p></div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section" id="contact">
+  <h2 class="cta-title">Готовы создать<br>что-то особенное?</h2>
+  <p class="cta-sub">Напишите мне — обсудим ваш проект и найдём лучшее решение</p>
+  <!-- Замени your@email.com на свой email -->
+  <a href="/cdn-cgi/l/email-protection#b3cadcc6c1f3d6ded2dadf9dd0dcde" class="cta-btn">
+    Написать мне
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </a>
+</section>
+
+<footer>
+  <div class="footer-logo">Antonina<span>.</span>Hudz</div>
+  <p class="footer-copy">© 2025 Antonina Hudz · AI Creator</p>
+  <ul class="footer-links">
+    <!-- Замени # на свои ссылки -->
+    <li><a href="#">Instagram</a></li>
+    <li><a href="#">Telegram</a></li>
+    <li><a href="#">YouTube</a></li>
+  </ul>
+</footer>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+  function switchTab(name, btn) {
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('tab-' + name).classList.add('active');
+    btn.classList.add('active');
+    document.querySelectorAll('#tab-' + name + ' .reveal').forEach((el, i) => {
+      el.classList.remove('visible');
+      setTimeout(() => el.classList.add('visible'), i * 80);
+    });
+  }
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => entry.target.classList.add('visible'), i * 80);
+        observer.unobserve(entry.target);
