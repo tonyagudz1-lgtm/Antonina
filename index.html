@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Portfolio — Antonina Hudz</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Cormorant+Garamond:wght@300;400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --red: #C0392B; --red-deep: #8B1A1A; --cream: #F5F0E8;
+    --off-white: #FAF8F5; --charcoal: #1A1A1A; --mid: #4A4A4A; --soft: #9A9A9A;
+  }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--charcoal); color: var(--cream); overflow-x: hidden; }
+
+  nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 24px 80px; display: flex; justify-content: space-between; align-items: center; }
+  .nav-logo { font-family: 'Playfair Display', serif; font-size: 16px; font-weight: 700; color: var(--charcoal); letter-spacing: .05em; }
+  .nav-links { display: flex; gap: 40px; list-style: none; }
+  .nav-links a { font-size: 11px; font-weight: 500; letter-spacing: .2em; text-transform: uppercase; color: var(--mid); text-decoration: none; transition: color .3s; }
+  .nav-links a:hover { color: var(--red); }
+
+  .hero { min-height: 100vh; background: var(--off-white); color: var(--charcoal); display: grid; grid-template-columns: 1fr 1fr; position: relative; overflow: hidden; }
+  .hero::before { content: ''; position: absolute; top: -100px; right: -100px; width: 600px; height: 600px; border-radius: 50%; background: radial-gradient(circle, rgba(192,57,43,.08) 0%, transparent 70%); pointer-events: none; }
+  .hero-text { display: flex; flex-direction: column; justify-content: center; padding: 80px 60px 80px 80px; position: relative; z-index: 2; }
+  .hero-tag { font-size: 11px; font-weight: 500; letter-spacing: .35em; text-transform: uppercase; color: var(--red); margin-bottom: 24px; opacity: 0; animation: fadeUp .8s ease forwards .2s; }
+  .hero-title { font-family: 'Playfair Display', serif; font-size: clamp(72px,8vw,110px); font-weight: 900; line-height: .9; letter-spacing: -.02em; color: var(--charcoal); opacity: 0; animation: fadeUp .8s ease forwards .4s; }
+  .hero-title span { color: var(--red); font-style: italic; }
+  .hero-name { font-family: 'Cormorant Garamond', serif; font-size: clamp(18px,2vw,26px); font-weight: 300; letter-spacing: .15em; color: var(--mid); margin-top: 20px; opacity: 0; animation: fadeUp .8s ease forwards .6s; }
+  .hero-desc { font-size: 15px; font-weight: 300; color: var(--mid); max-width: 380px; line-height: 1.8; margin-top: 36px; opacity: 0; animation: fadeUp .8s ease forwards .8s; }
+  .hero-cta { display: inline-flex; align-items: center; gap: 12px; margin-top: 48px; padding: 16px 36px; background: var(--red); color: white; font-size: 12px; font-weight: 500; letter-spacing: .2em; text-transform: uppercase; text-decoration: none; transition: background .3s, transform .3s; opacity: 0; animation: fadeUp .8s ease forwards 1s; }
+  .hero-cta:hover { background: var(--red-deep); transform: translateY(-2px); }
+  .hero-cta svg { transition: transform .3s; }
+  .hero-cta:hover svg { transform: translateX(4px); }
+  .hero-visual { background: var(--cream); position: relative; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+  .hero-photo-placeholder { width: 100%; height: 100%; background: linear-gradient(135deg,#e8e0d4,#d4c8b8); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; color: var(--soft); }
+  .hero-photo-placeholder .icon { font-size: 56px; opacity: .4; }
+  .hero-photo-placeholder p { font-size: 13px; letter-spacing: .1em; opacity: .6; }
+  .hero-badge { position: absolute; top: 40px; right: 40px; width: 100px; height: 100px; border-radius: 50%; border: 1px solid var(--red); display: flex; flex-direction: column; align-items: center; justify-content: center; opacity: 0; animation: fadeIn 1s ease forwards 1.2s; }
+  .hero-badge-inner { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 900; color: var(--red); line-height: 1; }
+  .hero-badge-label { font-size: 8px; letter-spacing: .2em; text-transform: uppercase; color: var(--mid); }
+
+  .section-header { display: flex; align-items: baseline; gap: 24px; margin-bottom: 80px; }
+  .section-num { font-family: 'Cormorant Garamond', serif; font-size: 14px; color: var(--red); letter-spacing: .1em; }
+  .section-title { font-family: 'Playfair Display', serif; font-size: clamp(36px,4vw,56px); font-weight: 700; line-height: 1.1; }
+  .section-line { flex: 1; height: 1px; background: rgba(255,255,255,.1); margin-bottom: 8px; }
+
+  .services { background: var(--charcoal); padding: 120px 80px; position: relative; overflow: hidden; }
+  .services::before { content: 'SLUŽBY'; position: absolute; top: 60px; left: -20px; font-family: 'Playfair Display', serif; font-size: 160px; font-weight: 900; color: rgba(255,255,255,.02); white-space: nowrap; pointer-events: none; }
+  .services-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 2px; }
+  .service-card { background: #222; padding: 48px 36px; position: relative; overflow: hidden; cursor: default; transition: background .4s; }
+  .service-card::after { content: ''; position: absolute; bottom: 0; left: 0; height: 3px; width: 0; background: var(--red); transition: width .4s ease; }
+  .service-card:hover { background: #2a2a2a; }
+  .service-card:hover::after { width: 100%; }
+  .service-icon { font-size: 36px; margin-bottom: 28px; display: block; }
+  .service-num { position: absolute; top: 24px; right: 24px; font-family: 'Cormorant Garamond', serif; font-size: 48px; font-weight: 300; color: rgba(255,255,255,.06); line-height: 1; }
+  .service-name { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 700; margin-bottom: 16px; line-height: 1.2; }
+  .service-desc { font-size: 13px; font-weight: 300; color: rgba(255,255,255,.5); line-height: 1.8; }
+
+  .works { background: #111; padding: 120px 80px; }
+  .works-tabs { display: flex; gap: 0; margin-bottom: 60px; border-bottom: 1px solid rgba(255,255,255,.1); }
+  .tab-btn { padding: 14px 32px; background: none; border: none; cursor: pointer; font-family: 'DM Sans', sans-serif; font-size: 11px; font-weight: 500; letter-spacing: .2em; text-transform: uppercase; color: rgba(255,255,255,.35); transition: color .3s; position: relative; }
+  .tab-btn::after { content: ''; position: absolute; bottom: -1px; left: 0; right: 0; height: 2px; background: var(--red); transform: scaleX(0); transition: transform .3s; }
+  .tab-btn.active { color: white; }
+  .tab-btn.active::after { transform: scaleX(1); }
+  .tab-btn:hover { color: rgba(255,255,255,.7); }
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  .photo-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 3px; }
+  .photo-item { aspect-ratio: 4/3; background: #222; position: relative; overflow: hidden; cursor: pointer; }
+  .photo-item img { width: 100%; height: 100%; object-fit: cover; transition: transform .5s; display: block; }
+  .photo-item:hover img { transform: scale(1.05); }
+  .photo-overlay { position: absolute; inset: 0; background: rgba(192,57,43,0); display: flex; align-items: center; justify-content: center; transition: background .3s; }
+  .photo-item:hover .photo-overlay { background: rgba(192,57,43,.7); }
+  .photo-overlay-text { color: white; font-size: 12px; font-weight: 500; letter-spacing: .15em; text-transform: uppercase; opacity: 0; transform: translateY(10px); transition: all .3s; }
+  .photo-item:hover .photo-overlay-text { opacity: 1; transform: translateY(0); }
+  .photo-placeholder { width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; background: linear-gradient(135deg,#2a2a2a,#1e1e1e); color: rgba(255,255,255,.2); }
+  .ph-icon { font-size: 32px; opacity: .5; }
+  .ph-text { font-size: 11px; letter-spacing: .1em; }
+
+  .video-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 3px; }
+  .video-item { aspect-ratio: 16/9; background: #1a1a1a; position: relative; overflow: hidden; cursor: pointer; }
+  .video-placeholder { width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; background: linear-gradient(135deg,#2a2a2a,#1e1e1e); color: rgba(255,255,255,.2); }
+  .video-play-btn { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); width: 52px; height: 52px; border-radius: 50%; background: rgba(192,57,43,.9); display: flex; align-items: center; justify-content: center; transition: transform .3s, background .3s; }
+  .video-item:hover .video-play-btn { transform: translate(-50%,-50%) scale(1.1); background: var(--red); }
+  .video-play-btn svg { margin-left: 3px; }
+  .video-label { position: absolute; bottom: 0; left: 0; right: 0; padding: 20px 20px 16px; background: linear-gradient(transparent,rgba(0,0,0,.8)); font-size: 12px; font-weight: 300; color: rgba(255,255,255,.7); letter-spacing: .05em; }
+
+  .avatar-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 3px; }
+  .avatar-item { aspect-ratio: 3/4; background: #222; position: relative; overflow: hidden; cursor: pointer; }
+  .avatar-item img { width: 100%; height: 100%; object-fit: cover; transition: transform .5s; }
+  .avatar-item:hover img { transform: scale(1.05); }
+  .avatar-placeholder { width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; background: linear-gradient(135deg,#252525,#1a1a1a); color: rgba(255,255,255,.2); }
+  .avatar-lang-badge { position: absolute; top: 12px; right: 12px; padding: 4px 10px; background: var(--red); color: white; font-size: 10px; font-weight: 600; letter-spacing: .1em; }
+
+  .add-work-hint { margin-top: 40px; text-align: center; font-size: 12px; color: rgba(255,255,255,.25); letter-spacing: .1em; }
+  .add-work-hint span { color: var(--red); }
+
+  .about { background: var(--cream); color: var(--charcoal); padding: 120px 80px; display: grid; grid-template-columns: 1fr 1fr; gap: 100px; align-items: center; }
+  .about-tag { font-size: 11px; font-weight: 500; letter-spacing: .35em; text-transform: uppercase; color: var(--red); margin-bottom: 20px; }
+  .about-title { font-family: 'Playfair Display', serif; font-size: clamp(36px,3.5vw,52px); font-weight: 900; line-height: 1.15; margin-bottom: 28px; }
+  .about-title em { font-style: italic; color: var(--red); }
+  .about-text { font-size: 15px; font-weight: 300; color: var(--mid); line-height: 1.9; margin-bottom: 20px; }
+  .tools-list { margin-top: 32px; display: flex; flex-wrap: wrap; gap: 10px; }
+  .tool-tag { padding: 8px 16px; border: 1px solid rgba(0,0,0,.15); font-size: 11px; font-weight: 400; letter-spacing: .1em; color: var(--mid); }
+  .stats { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; margin-top: 48px; padding-top: 48px; border-top: 1px solid rgba(0,0,0,.1); }
+  .stat-num { font-family: 'Playfair Display', serif; font-size: 48px; font-weight: 900; color: var(--red); line-height: 1; }
+  .stat-label { font-size: 12px; font-weight: 300; color: var(--soft); letter-spacing: .1em; margin-top: 6px; }
+  .about-quote-box { background: var(--charcoal); color: var(--cream); padding: 60px 52px; position: relative; }
+  .about-quote-box::before { content: '\201C'; font-family: 'Playfair Display', serif; font-size: 120px; color: var(--red); position: absolute; top: -20px; left: 32px; line-height: 1; opacity: .5; }
+  .about-quote { font-family: 'Cormorant Garamond', serif; font-size: 26px; font-weight: 400; font-style: italic; line-height: 1.6; position: relative; z-index: 1; margin-bottom: 28px; }
+  .about-quote-author { font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: var(--red); }
+
+  .process { background: #111; padding: 120px 80px; }
+  .process-steps { display: grid; grid-template-columns: repeat(5,1fr); gap: 0; margin-top: 80px; position: relative; }
+  .process-steps::before { content: ''; position: absolute; top: 32px; left: 10%; right: 10%; height: 1px; background: linear-gradient(90deg,transparent,var(--red),transparent); }
+  .step { padding: 0 20px; text-align: center; }
+  .step-dot { width: 16px; height: 16px; border-radius: 50%; background: var(--red); margin: 0 auto 32px; position: relative; z-index: 1; }
+  .step-dot::after { content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); width: 28px; height: 28px; border-radius: 50%; border: 1px solid rgba(192,57,43,.3); }
+  .step-num { font-family: 'Cormorant Garamond', serif; font-size: 11px; color: var(--red); letter-spacing: .2em; margin-bottom: 12px; }
+  .step-title { font-family: 'Playfair Display', serif; font-size: 17px; font-weight: 700; margin-bottom: 12px; line-height: 1.3; }
+  .step-desc { font-size: 12px; font-weight: 300; color: rgba(255,255,255,.45); line-height: 1.7; }
+
+  .cta-section { background: var(--red); padding: 120px 80px; text-align: center; position: relative; overflow: hidden; }
+  .cta-section::before { content: "POJĎME TVOŘIT"; position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); font-family: 'Playfair Display', serif; font-size: 140px; font-weight: 900; color: rgba(255,255,255,.05); white-space: nowrap; pointer-events: none; }
+  .cta-title { font-family: 'Playfair Display', serif; font-size: clamp(42px,5vw,72px); font-weight: 900; color: white; line-height: 1.1; margin-bottom: 20px; position: relative; }
+  .cta-sub { font-size: 16px; font-weight: 300; color: rgba(255,255,255,.75); margin-bottom: 52px; position: relative; }
+  .cta-btn { display: inline-flex; align-items: center; gap: 12px; padding: 20px 52px; background: white; color: var(--red); font-size: 12px; font-weight: 700; letter-spacing: .25em; text-transform: uppercase; text-decoration: none; transition: transform .3s, box-shadow .3s; position: relative; }
+  .cta-btn:hover { transform: translateY(-3px); box-shadow: 0 20px 40px rgba(0,0,0,.2); }
+
+  footer { background: #0a0a0a; padding: 60px 80px; display: flex; justify-content: space-between; align-items: center; }
+  .footer-logo { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; color: var(--cream); }
+  .footer-logo span { color: var(--red); }
+  .footer-copy { font-size: 12px; color: rgba(255,255,255,.3); letter-spacing: .1em; }
+  .footer-links { display: flex; gap: 32px; list-style: none; }
+  .footer-links a { font-size: 11px; letter-spacing: .15em; text-transform: uppercase; color: rgba(255,255,255,.4); text-decoration: none; transition: color .3s; }
+  .footer-links a:hover { color: var(--red); }
+
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  .reveal { opacity: 1; transform: translateY(0); }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  @media (max-width:1024px) {
+    .hero { grid-template-columns: 1fr; min-height: auto; }
+    .hero-visual { height: 300px; }
+    .hero-text { padding: 120px 40px 60px; }
+    .services, .works, .process, .cta-section { padding: 80px 40px; }
+    .services-grid { grid-template-columns: repeat(2,1fr); }
+    .photo-grid, .video-grid { grid-template-columns: repeat(2,1fr); }
+    .avatar-grid { grid-template-columns: repeat(2,1fr); }
+    .about { grid-template-columns: 1fr; gap: 60px; padding: 80px 40px; }
+    .process-steps { grid-template-columns: repeat(2,1fr); gap: 40px; }
+    .process-steps::before { display: none; }
+    footer { flex-direction: column; gap: 24px; padding: 40px; text-align: center; }
+    nav { padding: 20px 40px; }
+    .nav-links { display: none; }
+  }
+  @media (max-width:640px) {
+    .services-grid { grid-template-columns: 1fr; }
+    .photo-grid, .video-grid, .avatar-grid { grid-template-columns: 1fr; }
+    .stats { grid-template-columns: 1fr 1fr; }
+    .tab-btn { padding: 12px 14px; font-size: 10px; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">A·H</div>
+  <ul class="nav-links">
+    <li><a href="#services">Služby</a></li>
+    <li><a href="#works">Práce</a></li>
+    <li><a href="#about">O mně</a></li>
+    
+  </ul>
+</nav>
+
+<section class="hero">
+  <div class="hero-text">
+    <p class="hero-tag">AI Creator · Vizuální obsah</p>
+    <h1 class="hero-title">Port<span>folio</span></h1>
+    <p class="hero-name">Antonina Hudz</p>
+    <p class="hero-desc">Tvořím realistický AI obsah — fotografie, videa, avatary a překlady. Tam, kde se technologie setkává s kreativitou.</p>
+    <a href="#works" class="hero-cta">
+      Zobrazit práce
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </a>
+  </div>
+  <div class="hero-visual">
+    <div class="hero-photo-placeholder">
+      <span class="icon">📸</span>
+      <p>Vaše foto zde</p>
+    </div>
+    <div class="hero-badge">
+      <span class="hero-badge-inner">AI</span>
+      <span class="hero-badge-label">Creator</span>
+    </div>
+  </div>
+</section>
+
+<section class="services" id="services">
+  <div class="section-header">
+    <span class="section-num">01</span>
+    <h2 class="section-title">Co dělám</h2>
+    <div class="section-line"></div>
+  </div>
+  <div class="services-grid">
+    <div class="service-card">
+      <span class="service-num">01</span>
+      <span class="service-icon">🖼️</span>
+      <h3 class="service-name">Realistické AI fotografie</h3>
+      <p class="service-desc">Hyperrealistické snímky — portréty, produktové fotografie, koncepty a atmosférické scény v jakémkoli stylu.</p>
+    </div>
+    <div class="service-card">
+      <span class="service-num">02</span>
+      <span class="service-icon">🎬</span>
+      <h3 class="service-name">AI video</h3>
+      <p class="service-desc">Realistické videoklipy a animace pro sociální sítě, reklamu a prezentace. Pohyblivé scény, které ohromí.</p>
+    </div>
+    <div class="service-card">
+      <span class="service-num">03</span>
+      <span class="service-icon">🧑‍🎨</span>
+      <h3 class="service-name">AI avatary</h3>
+      <p class="service-desc">Personalizované avatary v různých stylech — od fotorealismu po uměleckou ilustraci. Pro profily a branding.</p>
+    </div>
+    <div class="service-card">
+      <span class="service-num">04</span>
+      <span class="service-icon">🌐</span>
+      <h3 class="service-name">Překlady s avatarem</h3>
+      <p class="service-desc">Váš avatar mluví jakýmkoli jazykem — angličtina, španělština, francouzština a další. Ideální pro mezinárodní obsah.</p>
+    </div>
+  </div>
+</section>
+
+<section class="works" id="works">
+  <div class="section-header">
+    <span class="section-num">02</span>
+    <h2 class="section-title">Moje práce</h2>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="works-tabs">
+    <button class="tab-btn active" onclick="switchTab('photos',this)">AI foto</button>
+    <button class="tab-btn" onclick="switchTab('videos',this)">AI video</button>
+    <button class="tab-btn" onclick="switchTab('avatars',this)">Avatary</button>
+    <button class="tab-btn" onclick="switchTab('translations',this)">Překlady</button>
+  </div>
+
+  <div class="tab-panel active" id="tab-photos">
+    <div class="photo-grid">
+      <div class="photo-item"><img src="https://lh3.googleusercontent.com/d/1HxzFjSnPzJ1virRtosLpQ3IUM1zmi7NR" alt="AI foto"><div class="photo-overlay"><span class="photo-overlay-text">Zobrazit</span></div></div>
+      <div class="photo-item"><img src="https://lh3.googleusercontent.com/d/1Koprb5M74pyJR2CFFNRiF6fdvYTFSvSs" alt="AI foto"><div class="photo-overlay"><span class="photo-overlay-text">Zobrazit</span></div></div>
+      <div class="photo-item"><img src="https://lh3.googleusercontent.com/d/1Ky4B-26QMkdynXqIDTjNw2v8nPu6DibI" alt="AI foto"><div class="photo-overlay"><span class="photo-overlay-text">Zobrazit</span></div></div>
+      <div class="photo-item"><img src="https://lh3.googleusercontent.com/d/1LdUASC2ol5BmS7_Zeb0ShuKttp6M2drN" alt="AI foto"><div class="photo-overlay"><span class="photo-overlay-text">Zobrazit</span></div></div>
+      <div class="photo-item"><img src="https://lh3.googleusercontent.com/d/1ODXL53r2DIm8OIj7U0bMQz3kz0Wdaptw" alt="AI foto"><div class="photo-overlay"><span class="photo-overlay-text">Zobrazit</span></div></div>
+      <div class="photo-item"><img src="https://lh3.googleusercontent.com/d/1UCAumOhf6RmBZazblEQ8k9bOcdq5CsBa" alt="AI foto"><div class="photo-overlay"><span class="photo-overlay-text">Zobrazit</span></div></div>
+      <div class="photo-item"><img src="https://lh3.googleusercontent.com/d/1Umr_B0hagm4Edga7joPQjQcs3RsQuvSB" alt="AI foto"><div class="photo-overlay"><span class="photo-overlay-text">Zobrazit</span></div></div>
+      <div class="photo-item"><img src="https://lh3.googleusercontent.com/d/1VgqNHCIdvhj_aOUSgYCfU0mFdy1M4hpC" alt="AI foto"><div class="photo-overlay"><span class="photo-overlay-text">Zobrazit</span></div></div>
+      <div class="photo-item"><img src="https://lh3.googleusercontent.com/d/1hBtwX2kYwmGbu--bkn3Bah01Ha2jRGia" alt="AI foto"><div class="photo-overlay"><span class="photo-overlay-text">Zobrazit</span></div></div>
+      <div class="photo-item"><img src="https://lh3.googleusercontent.com/d/1rY7P8ysPwo7y0R4DNMb0elqGBx7G41ej" alt="AI foto"><div class="photo-overlay"><span class="photo-overlay-text">Zobrazit</span></div></div>
+      <div class="photo-item"><img src="https://lh3.googleusercontent.com/d/1u0wAKd4lmbuxqIltzq978vePtu17jXeK" alt="AI foto"><div class="photo-overlay"><span class="photo-overlay-text">Zobrazit</span></div></div>
+      <div class="photo-item"><img src="https://lh3.googleusercontent.com/d/1vqbVABXsqRvWDDGGZ-Tq64vo0gtr3gF7" alt="AI foto"><div class="photo-overlay"><span class="photo-overlay-text">Zobrazit</span></div></div>
+    </div>
+  </div>
+
+  <div class="tab-panel" id="tab-videos">
+    <div class="video-grid">
+      <div class="video-item" style="cursor:default">
+        <iframe src="https://drive.google.com/file/d/196zaRXIFFoPijWtlQGo9LOa094LhCBhC/preview" style="width:100%;height:100%;border:none;display:block;" allow="autoplay" allowfullscreen></iframe>
+        <div class="video-label">AI video</div>
+      </div>
+      <div class="video-item" style="cursor:default">
+        <iframe src="https://drive.google.com/file/d/1CItZlchQdekYfs88xHyaBm1HWozoPJwg/preview" style="width:100%;height:100%;border:none;display:block;" allow="autoplay" allowfullscreen></iframe>
+        <div class="video-label">AI video</div>
+      </div>
+      <div class="video-item" style="cursor:default">
+        <iframe src="https://drive.google.com/file/d/1g7ec0CqvoSyj1NOt4iol5nRm7gxO8yv1/preview" style="width:100%;height:100%;border:none;display:block;" allow="autoplay" allowfullscreen></iframe>
+        <div class="video-label">AI video</div>
+      </div>
+    </div>
+    <p class="add-work-hint">Videa z <span>Google Drive</span> — pro přehrávání klikni přímo na video</p>
+  </div>
+
+  <div class="tab-panel" id="tab-avatars">
+    <div class="avatar-grid">
+      <div class="avatar-item">
+        <div class="avatar-placeholder"><span style="font-size:32px;opacity:.4">🧑‍🎨</span><span style="font-size:11px;color:rgba(255,255,255,.2)">Avatar 1</span></div>
+        <div class="avatar-lang-badge">Styl 1</div>
+      </div>
+      <div class="avatar-item">
+        <div class="avatar-placeholder"><span style="font-size:32px;opacity:.4">🧑‍🎨</span><span style="font-size:11px;color:rgba(255,255,255,.2)">Avatar 2</span></div>
+        <div class="avatar-lang-badge">Styl 2</div>
+      </div>
+      <div class="avatar-item">
+        <div class="avatar-placeholder"><span style="font-size:32px;opacity:.4">🧑‍🎨</span><span style="font-size:11px;color:rgba(255,255,255,.2)">Avatar 3</span></div>
+        <div class="avatar-lang-badge">Styl 3</div>
+      </div>
+      <div class="avatar-item">
+        <div class="avatar-placeholder"><span style="font-size:32px;opacity:.4">🧑‍🎨</span><span style="font-size:11px;color:rgba(255,255,255,.2)">Avatar 4</span></div>
+        <div class="avatar-lang-badge">Styl 4</div>
+      </div>
+    </div>
+    <p class="add-work-hint">Pošli fotografie svých avatarů — přidám je sem</p>
+  </div>
+
+  <div class="tab-panel" id="tab-translations">
+    <div class="video-grid">
+      <div class="video-item" onclick="window.open('ODKAZ_PREKLAD_EN','_blank')">
+        <div class="video-placeholder">
+          <span style="font-size:28px;opacity:.5">🇬🇧</span>
+          <span style="font-size:11px;letter-spacing:.1em;margin-top:4px">English</span>
+        </div>
+        <div class="video-play-btn"><svg width="18" height="18" viewBox="0 0 18 18" fill="white"><path d="M5 3l11 6-11 6V3z"/></svg></div>
+        <div class="video-label">Avatar mluví anglicky · HeyGen</div>
+      </div>
+      <div class="video-item" onclick="window.open('ODKAZ_PREKLAD_ES','_blank')">
+        <div class="video-placeholder">
+          <span style="font-size:28px;opacity:.5">🇪🇸</span>
+          <span style="font-size:11px;letter-spacing:.1em;margin-top:4px">Español</span>
+        </div>
+        <div class="video-play-btn"><svg width="18" height="18" viewBox="0 0 18 18" fill="white"><path d="M5 3l11 6-11 6V3z"/></svg></div>
+        <div class="video-label">Avatar mluví španělsky · HeyGen</div>
+      </div>
+      <div class="video-item" onclick="window.open('ODKAZ_PREKLAD_FR','_blank')">
+        <div class="video-placeholder">
+          <span style="font-size:28px;opacity:.5">🇫🇷</span>
+          <span style="font-size:11px;letter-spacing:.1em;margin-top:4px">Français</span>
+        </div>
+        <div class="video-play-btn"><svg width="18" height="18" viewBox="0 0 18 18" fill="white"><path d="M5 3l11 6-11 6V3z"/></svg></div>
+        <div class="video-label">Avatar mluví francouzsky · HeyGen</div>
+      </div>
+    </div>
+    <p class="add-work-hint">Nahraď <span>ODKAZ_PREKLAD_EN</span> svými skutečnými odkazy</p>
+  </div>
+</section>
+
+<section class="about" id="about">
+  <div>
+    <p class="about-tag">03 · O mně</p>
+    <h2 class="about-title">AI vizuál,<br>který <em>funguje</em></h2>
+    <p class="about-text">Jsem Antonina — AI creator specializující se na tvorbu vizuálního obsahu nové generace. Používám nejmodernější AI nástroje k vytváření fotografií a videí, která nelze odlišit od reality.</p>
+    <p class="about-text">Můj přístup je syntézou technické expertízy a uměleckého citu. Každý projekt je promyšlený vizuální příběh — ne jen vygenerovaný obrázek.</p>
+    <div class="tools-list">
+      <span class="tool-tag">Midjourney</span>
+      <span class="tool-tag">Nano Banana Pro</span>
+      <span class="tool-tag">Kling AI</span>
+      <span class="tool-tag">Veo 3</span>
+      <span class="tool-tag">HeyGen</span>
+    </div>
+
+  </div>
+  <div class="reveal">
+    <div class="about-quote-box">
+      <p class="about-quote">Nejen používám AI — proměňuji ho v nástroj skutečné kreativity.</p>
+      <p class="about-quote-author">— Antonina Hudz</p>
+    </div>
+  </div>
+</section>
+
+<section class="process">
+  <div class="section-header">
+    <span class="section-num">04</span>
+    <h2 class="section-title">Jak pracuji</h2>
+    <div class="section-line"></div>
+  </div>
+  <div class="process-steps">
+    <div class="step"><div class="step-dot"></div><div class="step-num">Krok 01</div><h4 class="step-title">Brief</h4><p class="step-desc">Probereme zadání, styl, reference a očekávání</p></div>
+    <div class="step"><div class="step-dot"></div><div class="step-num">Krok 02</div><h4 class="step-title">Koncept</h4><p class="step-desc">Vypracuji vizuální koncept a první varianty</p></div>
+    <div class="step"><div class="step-dot"></div><div class="step-num">Krok 03</div><h4 class="step-title">Tvorba</h4><p class="step-desc">Vytvořím obsah správným nástrojem pro daný úkol</p></div>
+    <div class="step"><div class="step-dot"></div><div class="step-num">Krok 04</div><h4 class="step-title">Úpravy</h4><p class="step-desc">Retušování, korekce a finální doladění výsledku</p></div>
+    <div class="step"><div class="step-dot"></div><div class="step-num">Krok 05</div><h4 class="step-title">Doručení</h4><p class="step-desc">Finální soubory ve správném formátu a rozlišení</p></div>
+  </div>
+</section>
+
+
+<footer>
+  <div class="footer-logo">Antonina<span>.</span>Hudz</div>
+  <p class="footer-copy">© 2025 Antonina Hudz · AI Creator</p>
+
+</footer>
+
+<script>
+  function switchTab(name, btn) {
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('tab-' + name).classList.add('active');
+    btn.classList.add('active');
+    document.querySelectorAll('#tab-' + name + ' .reveal').forEach((el, i) => {
+      el.classList.remove('visible');
+      setTimeout(() => el.classList.add('visible'), i * 80);
+    });
+  }
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => entry.target.classList.add('visible'), i * 80);
+        observer.unobserve(entry.target);
